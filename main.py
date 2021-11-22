@@ -1,4 +1,5 @@
 import discord
+from discord.utils import get
 import os
 from tasks import TaskClass
 from dotenv import load_dotenv
@@ -10,12 +11,14 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 ### Jed's minecraft 1.18 prediction
-date_pred = datetime(2021,11,26) # 11am
-
+# date_pred = datetime(2021,11,26) # 11am
+### Actual prediction
+date_pred = datetime(2021,11,30)
 
 # init client
 client = discord.Client()
 
+# tc = TaskClass(client)
 
 @client.event
 async def on_ready():
@@ -40,6 +43,6 @@ async def on_message(message):
         if (hours == 1) : hour_g = "1 hour"
         if (minutes == 1) : min_g = "1 minute" 
 
-        await message.channel.send("There {d}, {h}, {m} remaining until Jed's **Minecraft 1.18** release date prediction".format(d=day_g, h=hour_g, m=min_g))
+        await message.channel.send("There {d}, {h} and {m} remaining until the **Minecraft 1.18** release date!".format(d=day_g, h=hour_g, m=min_g))
 
 client.run(TOKEN)
