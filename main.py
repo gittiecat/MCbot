@@ -20,16 +20,54 @@ client = discord.Client()
 
 # tc = TaskClass(client)
 
+shane_mute = False
+shadow_mute = False
+
+def shaneMute():
+    return not shane_mute
+
+def shadowMute():
+    return not shadow_mute
+
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
 @client.event
 async def on_message(message):
+    global shane_mute
+    global shadow_mute
+
     ### DO NOT MOVE - MUST ALWAYS BE ON TOP
     if message.author == client.user:
         return
     
+    if message.content.startswith("$muteshane") and not str(message.author) == "Stoopid Shane#4570":
+        if (str(message.author) == "TheShadowKing#0783" and shadow_mute):
+            return
+        shane_mute = shaneMute()
+        if shane_mute:
+            await message.add_reaction(emoji="🔇")
+        else:
+            await message.add_reaction(emoji="🔊")
+        return
+
+    if message.content.startswith("$muteshadow") and not str(message.author) == "TheShadowKing#0783":
+        if (str(message.author) == "Stoopid Shane#4570" and shane_mute):
+            return
+        shadow_mute = shadowMute()
+        if shadow_mute:
+            await message.add_reaction(emoji="🔇")
+        else:
+            await message.add_reaction(emoji="🔊")
+        return
+
+    if str(message.author) == "Stoopid Shane#4570" and shane_mute:
+        await message.delete()
+
+    if str(message.author) == "TheShadowKing#0783" and shadow_mute:
+        await message.delete()
+
     if message.content.startswith("$countdown"):
         date_now = datetime.now()
         x = date_pred - date_now
